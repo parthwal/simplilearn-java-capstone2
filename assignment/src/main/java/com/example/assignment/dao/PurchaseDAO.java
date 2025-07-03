@@ -9,4 +9,6 @@ import java.util.List;
 public interface PurchaseDAO extends JpaRepository<Purchase, Long> {
     List<Purchase> findByDateBetween(LocalDate start, LocalDate end);
     List<Purchase> findByProductCategory(String category);
+    List<Purchase> findByProductCategoryAndDateBetween(String category, LocalDate start, LocalDate end);
+
 }

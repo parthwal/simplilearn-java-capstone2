@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Purchase Report</title>
+</head>
+<body>
+    <h2>Filter Purchases</h2>
+    <form method="get" th:action="@{/purchases}">
+        <label>Date:</label>
+        <input type="date" name="date"/>
+
+        <label>Category:</label>
+        <input type="text" name="category"/>
+
+        <button type="submit">Search</button>
+    </form>
+
+    <h3>Purchase Results</h3>
+    <table border="1">
+        <tr>
+            <th>User</th>
+            <th>Product</th>
+            <th>Category</th>
+            <th>Date</th>
+        </tr>
+        <tr th:each="purchase : ${purchases}">
+            <td th:text="${purchase.user.name}">User</td>
+            <td th:text="${purchase.product.name}">Product</td>
+            <td th:text="${purchase.product.category}">Category</td>
+            <td th:text="${purchase.date}">Date</td>
+        </tr>
+    </table>
+
+    <a th:href="@{/dashboard}">Back</a>
+</body>
+</html>

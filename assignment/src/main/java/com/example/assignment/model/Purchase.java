@@ -17,6 +17,16 @@ public class Purchase {
 
     private LocalDate date;
 
+    private int quantity;
+    
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	public Long getId() {
 		return id;
 	}

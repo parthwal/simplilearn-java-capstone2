@@ -8,9 +8,20 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-    private String name;
+    public Product() {
+	}
+
+	private String name;
     private String category;
     private double price;
+    private int quantity;
+
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 	public Long getId() {
 		return id;
 	}
