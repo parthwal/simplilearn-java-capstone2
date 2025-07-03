@@ -40,29 +40,17 @@ public class ViewController {
     public String showLoginPage() {
         return "login";
     }
-
+    
     @PostMapping("/login")
     public String handleLogin(@RequestParam String email,
                               @RequestParam String password,
                               HttpSession session) {
-    	
-    	if (email.equals("admin@admin.com") && password.equals("admin")) {
-    	    User admin = new User();
-    	    admin.setName("Admin");
-    	    admin.setEmail("admin@admin.com");
-    	    admin.setPassword("admin");
-    	    admin.setRole("ADMIN");
-    	    session.setAttribute("user", admin);
-    	    return "redirect:/dashboard";
-    	}
-
         User user = userDAO.findByEmailAndPassword(email, password);
         if (user == null) {
             return "redirect:/login?error=true";
         }
-
         session.setAttribute("user", user);
-        return "redirect:/user-home";
+        return user.getRole().equals("ADMIN") ? "redirect:/dashboard" : "redirect:/user-home";
     }
 
     @PostMapping("/signup")
@@ -83,26 +71,23 @@ public class ViewController {
         session.invalidate();
         return "redirect:/login";
     }
+    
     @PostMapping("/change-password")
     public String changePassword(@RequestParam String email,
                                  @RequestParam String oldPassword,
-                                 @RequestParam String newPassword,
-                                 HttpSession session) {
-
-        if (email.equals("admin@admin.com") && oldPassword.equals("admin")) {
-            session.setAttribute("adminPassword", newPassword);
-            return "redirect:/login?message=Admin password changed";
-        }
+                                 @RequestParam String newPassword) {
 
         User user = userDAO.findByEmailAndPassword(email, oldPassword);
-        if (user != null) {
-            user.setPassword(newPassword);
-            userDAO.save(user);
-            return "redirect:/login?message=User password changed";
+        if (user == null) {
+            return "redirect:/login?error=invalid";
         }
 
-        return "redirect:/login?error=Invalid credentials";
+        user.setPassword(newPassword);
+        userDAO.saveAndFlush(user);
+
+        return "redirect:/login?success=passwordChanged";
     }
+
 
 
     @GetMapping("/dashboard")
